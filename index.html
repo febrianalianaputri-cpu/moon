@@ -425,5 +425,60 @@ https://templatemo.com/tm-512-moonlight
         };
     }
     </script>
+						 
+<div id="app" style="display:none;">
+  <h2>Wishlist Liburan 🌴</h2>
+  <input type="text" id="tempat" placeholder="Tambah tempat...">
+  <button onclick="tambah()">Tambah</button>
+
+  <ul id="list"></ul>
+</div>
+
+<script>
+let data = JSON.parse(localStorage.getItem("liburan")) || [];
+
+function login() {
+  let user = document.getElementById("username").value;
+  if(user) {
+    document.getElementById("app").style.display = "block";
+    loadData();
+  }
+}
+
+function tambah() {
+  let tempat = document.getElementById("tempat").value;
+  if(tempat) {
+    data.push({ nama: tempat, done: false });
+    localStorage.setItem("liburan", JSON.stringify(data));
+    loadData();
+  }
+}
+
+function loadData() {
+  let list = document.getElementById("list");
+  list.innerHTML = "";
+  data.forEach((item, index) => {
+    list.innerHTML += `
+      <li>
+        <input type="checkbox" onclick="toggle(${index})" ${item.done ? "checked" : ""}>
+        ${item.nama}
+        <button onclick="hapus(${index})">❌</button>
+      </li>
+    `;
+  });
+}
+
+function toggle(i) {
+  data[i].done = !data[i].done;
+  localStorage.setItem("liburan", JSON.stringify(data));
+  loadData();
+}
+
+function hapus(i) {
+  data.splice(i, 1);
+  localStorage.setItem("liburan", JSON.stringify(data));
+  loadData();
+}
+</script>
 </body>
 </html>
